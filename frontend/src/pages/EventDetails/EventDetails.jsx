@@ -14,7 +14,7 @@ import {
 import Navbar from "../../components/layout/Navbar/Navbar";
 import styles from "./EventDetails.module.css";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://ticketflow-backend-lrnp.onrender.com/api";
 
 function EventDetails() {
     const { eventId } = useParams();
