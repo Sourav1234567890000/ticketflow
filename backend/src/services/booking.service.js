@@ -10,6 +10,8 @@ export const processBooking = async (bookingId) => {
 
     try {
         await session.withTransaction(async () => {
+            const now = new Date();
+
             // Claim this booking request.
             const booking = await Booking.findOneAndUpdate(
                 {
@@ -19,11 +21,11 @@ export const processBooking = async (bookingId) => {
                 {
                     $set: {
                         status: "processing",
-                        bookingAttemptedAt: new Date(),
+                        bookingAttemptedAt: now,
                     },
                 },
                 {
-                    new: true,
+                    returnDocument: "after",
                     session,
                 }
             );
@@ -45,6 +47,7 @@ export const processBooking = async (bookingId) => {
                 return;
             }
 
+            // Check whether the event is cancelled or completed.
             if (event.status === "cancelled" || event.status === "completed") {
                 booking.status = "failed";
                 booking.failureReason = "Event is no longer available.";
@@ -54,8 +57,8 @@ export const processBooking = async (bookingId) => {
                 return;
             }
 
-            // Do not process before ticket sales open.
-            if (new Date(event.salesOpenAt) > new Date()) {
+            // Check whether sales opening time has arrived.
+            if (now < new Date(event.salesOpenAt)) {
                 booking.status = "pending";
                 booking.bookingAttemptedAt = null;
                 await booking.save({ session });
@@ -64,7 +67,18 @@ export const processBooking = async (bookingId) => {
                 return;
             }
 
-            if (new Date(event.eventDate) <= new Date()) {
+            // Check whether sales have closed.
+            if (!event.salesCloseAt || now >= new Date(event.salesCloseAt)) {
+                booking.status = "failed";
+                booking.failureReason = "Ticket sales have closed.";
+                await booking.save({ session });
+
+                result = { status: "failed", reason: booking.failureReason };
+                return;
+            }
+
+            // Check whether the event has already started.
+            if (new Date(event.eventDate) <= now) {
                 booking.status = "failed";
                 booking.failureReason = "Event has already started.";
                 await booking.save({ session });

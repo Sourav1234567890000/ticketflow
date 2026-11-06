@@ -85,10 +85,24 @@ export const createBookingRequest = async (req, res) => {
       });
     }
 
-    if (event.status !== "upcoming" || event.salesOpenAt <= new Date()) {
+    const now = new Date();
+
+    if (
+      event.status !== "upcoming" ||
+      now < event.salesOpenAt ||
+      now >= event.salesCloseAt
+    ) {
+
+      console.log("Booking request rejected:", {
+        eventName: event.name,
+        currentTime: now.toISOString(),
+        salesCloseAt: event.salesCloseAt,
+        reason: "Ticket sales have closed",
+      });
+
       return res.status(400).json({
         success: false,
-        message: "Booking preferences can only be created before sales open",
+        message: "Booking preferences can only be created during the sales window",
       });
     }
 

@@ -64,7 +64,7 @@
   gap: 14px;
 }
 
-.infoItem > svg {
+.infoItem>svg {
   color: #7655e8;
   width: 22px;
   height: 22px;
@@ -111,7 +111,7 @@
   margin-bottom: 28px;
 }
 
-.heading > span {
+.heading>span {
   width: 35px;
   height: 35px;
   border-radius: 10px;
@@ -335,5 +335,26 @@
 
   .sectionGrid {
     grid-template-columns: 1fr;
+  }
+
+  .salesBanner {
+    grid-column: 1 / -1;
+    padding: 16px 20px;
+    border-radius: 10px;
+    background: #f5f5f5;
+    border: 1px solid #e5e5e5;
+  }
+
+  .salesBanner strong {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 15px;
+    color: #171717;
+  }
+
+  .salesBanner p {
+    margin: 0;
+    font-size: 13px;
+    color: #666;
   }
 }

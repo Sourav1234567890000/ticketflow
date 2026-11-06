@@ -4,27 +4,50 @@ import Seat from "../models/seat.model.js";
 // Create event
 export const createEvent = async (req, res) => {
     try {
-        const { name, venue, eventDate, salesOpenAt } = req.body;
+        const { name, venue, eventDate, salesOpenAt, salesCloseAt } = req.body;
 
-        if (!name || !venue || !eventDate || !salesOpenAt) {
+        if (!name || !venue || !eventDate || !salesOpenAt || !salesCloseAt) {
             return res.status(400).json({
                 success: false,
                 message: "All fields are required"
             });
         }
 
-        if (new Date(salesOpenAt) >= new Date(eventDate)) {
+        const eventDateTime = new Date(eventDate);
+        const salesOpenTime = new Date(salesOpenAt);
+        const salesCloseTime = new Date(salesCloseAt);
+
+        if (
+            isNaN(eventDateTime.getTime()) ||
+            isNaN(salesOpenTime.getTime()) ||
+            isNaN(salesCloseTime.getTime())
+        ) {
             return res.status(400).json({
                 success: false,
-                message: "Sales opening time must be before the event date"
+                message: "Invalid date format"
+            });
+        }
+
+        if (salesOpenTime >= salesCloseTime) {
+            return res.status(400).json({
+                success: false,
+                message: "Sales opening time must be before sales closing time"
+            });
+        }
+
+        if (salesCloseTime >= eventDateTime) {
+            return res.status(400).json({
+                success: false,
+                message: "Sales closing time must be before the event date"
             });
         }
 
         const event = await Event.create({
             name,
             venue,
-            eventDate,
-            salesOpenAt
+            eventDate: eventDateTime,
+            salesOpenAt: salesOpenTime,
+            salesCloseAt: salesCloseTime
         });
 
         return res.status(201).json({

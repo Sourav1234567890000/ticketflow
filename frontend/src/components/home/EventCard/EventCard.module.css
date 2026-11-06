@@ -1,8 +1,11 @@
 .card {
+  display: block;
   overflow: hidden;
   background: #fff;
   border: 1px solid #eee;
   border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -29,7 +32,7 @@
   position: absolute;
   top: 14px;
   left: 14px;
-  padding: 6px 12px;
+  padding: 7px 12px;
   border-radius: 20px;
   background: #fff;
   color: #333;
@@ -43,14 +46,15 @@
 }
 
 .content h3 {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
   font-size: 19px;
+  color: #171717;
 }
 
 .eventInfo {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   color: #777;
   font-size: 13px;
 }
@@ -58,7 +62,12 @@
 .eventInfo span {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
+}
+
+.eventInfo svg {
+  flex-shrink: 0;
+  color: #999;
 }
 
 .cardFooter {
@@ -68,8 +77,9 @@
   align-items: center;
   justify-content: space-between;
   border-top: 1px solid #eee;
-  color: #777;
+  color: #555;
   font-size: 12px;
+  font-weight: 600;
 }
 
 .cardFooter button {
@@ -83,10 +93,4 @@
   background: #171717;
   color: white;
   cursor: pointer;
-}
-
-.card {
-  display: block;
-  text-decoration: none;
-  color: inherit;
 }

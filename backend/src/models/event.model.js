@@ -23,6 +23,11 @@ const eventSchema = new mongoose.Schema(
             required: true
         },
 
+        salesCloseAt: {
+            type: Date,
+            required: true
+        },
+
         status: {
             type: String,
             enum: ["upcoming", "live", "completed", "cancelled"],
