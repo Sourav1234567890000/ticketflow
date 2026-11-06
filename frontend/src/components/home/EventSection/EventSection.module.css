@@ -1,0 +1,105 @@
+.eventsSection {
+  padding: 75px 8%;
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #f26b38;
+}
+
+.sectionHeading h2 {
+  margin: 10px 0 0;
+  font-size: 34px;
+  letter-spacing: -1px;
+}
+
+.sectionHeading a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #f26b38;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.categoryList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.categoryList button {
+  padding: 11px 20px;
+  border: 1px solid #e5e3df;
+  border-radius: 25px;
+  background: white;
+  color: #555;
+  cursor: pointer;
+}
+
+.categoryList button:hover {
+  border-color: #f26b38;
+}
+
+.activeCategory {
+  background: #171717 !important;
+  color: white !important;
+  border-color: #171717 !important;
+}
+
+.emptyEvents {
+  margin-top: 35px;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed #d8d5cf;
+  border-radius: 12px;
+  color: #777;
+}
+
+.emptyEvents h3 {
+  margin-bottom: 5px;
+  color: #222;
+}
+
+.emptyEvents p {
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+@media (max-width: 700px) {
+  .eventsSection {
+    padding: 55px 6%;
+  }
+}
+
+.eventGrid {
+  margin-top: 35px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .eventGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .eventGrid {
+    grid-template-columns: 1fr;
+  }
+}
