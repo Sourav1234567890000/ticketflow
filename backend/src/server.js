@@ -20,7 +20,7 @@ const app = express();
 // Middleware
 const allowedOrigins = [
     "http://localhost:5173",
-    "https://ticketflow.vercel.app"
+    "https://ticketflow-cyan.vercel.app"
 ];
 
 app.use(cors({
