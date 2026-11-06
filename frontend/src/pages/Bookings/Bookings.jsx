@@ -11,7 +11,7 @@ import {
 import Navbar from "../../components/layout/Navbar/Navbar";
 import styles from "./Bookings.module.css";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://ticketflow-backend-lrnp.onrender.com/api";
 
 function Bookings() {
   const [email, setEmail] = useState(
