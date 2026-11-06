@@ -159,8 +159,14 @@ export function buildMcpServer() {
           return fail("Event not found.");
         }
 
-        if (event.status !== "upcoming" || event.salesOpenAt <= new Date()) {
-          return fail("Booking requests are only accepted before ticket sales open.");
+        const now = new Date();
+
+        if (
+          !["upcoming", "live"].includes(event.status) ||
+          now >= new Date(event.salesCloseAt) ||
+          now >= new Date(event.eventDate)
+        ) {
+          return fail("Booking preferences can no longer be created for this event.");
         }
 
         const booking = await Booking.create({
