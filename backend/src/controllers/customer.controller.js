@@ -88,21 +88,21 @@ export const createBookingRequest = async (req, res) => {
     const now = new Date();
 
     if (
-      event.status !== "upcoming" ||
-      now < event.salesOpenAt ||
-      now >= event.salesCloseAt
+      !["upcoming", "live"].includes(event.status) ||
+      !event.salesCloseAt ||
+      now >= new Date(event.salesCloseAt) ||
+      now >= new Date(event.eventDate)
     ) {
-
       console.log("Booking request rejected:", {
         eventName: event.name,
         currentTime: now.toISOString(),
         salesCloseAt: event.salesCloseAt,
-        reason: "Ticket sales have closed",
+        reason: "Booking preferences are no longer accepted",
       });
 
       return res.status(400).json({
         success: false,
-        message: "Booking preferences can only be created during the sales window",
+        message: "Booking preferences can no longer be created for this event",
       });
     }
 

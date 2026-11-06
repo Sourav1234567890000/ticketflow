@@ -145,7 +145,15 @@ function EventDetails() {
     };
 
     const salesStatus = getSalesStatus();
-    const canBook = salesStatus === "Sales Live";
+    const salesCloseAt = new Date(event?.salesCloseAt);
+    const eventDate = new Date(event?.eventDate);
+
+    const canCreatePreference =
+        ["upcoming", "live"].includes(event?.status) &&
+        Number.isFinite(salesCloseAt.getTime()) &&
+        Number.isFinite(eventDate.getTime()) &&
+        currentTime < salesCloseAt &&
+        currentTime < eventDate;
 
     // Handle section selection
     const handleSectionChange = (section) => {
@@ -160,8 +168,8 @@ function EventDetails() {
         setError("");
         setSuccess("");
 
-        if (!canBook) {
-            setError("Ticket sales are currently closed.");
+        if (!canCreatePreference) {
+            setError("Booking preferences can no longer be created for this event.");
             return;
         }
 
@@ -243,8 +251,7 @@ function EventDetails() {
     );
 
     const statusMessages = {
-        "Sales Not Open": `Booking opens on ${formatDateTime(event.salesOpenAt)}`,
-        "Sales Live": "You can save your booking preferences now.",
+        "Sales Not Open": `You can save your preferences now. Ticket allocation starts on ${formatDateTime(event.salesOpenAt)}.`, "Sales Live": "You can save your booking preferences now.",
         "Sales Closed": "Ticket sales have ended. Booking is no longer available.",
         "Event Completed": "This event has already taken place.",
         Cancelled: "This event has been cancelled.",
@@ -349,11 +356,10 @@ function EventDetails() {
                                         onClick={() =>
                                             handleSectionChange(section)
                                         }
-                                        className={`${styles.sectionCard} ${
-                                            selectedSection === section.section
-                                                ? styles.selectedSection
-                                                : ""
-                                        }`}
+                                        className={`${styles.sectionCard} ${selectedSection === section.section
+                                            ? styles.selectedSection
+                                            : ""
+                                            }`}
                                     >
                                         <span>{section.section}</span>
                                         <strong>₹{section.price}</strong>
@@ -422,7 +428,7 @@ function EventDetails() {
                                 }}
                                 required
                                 disabled={
-                                    sections.length === 0 || !canBook
+                                    sections.length === 0 || !canCreatePreference
                                 }
                             >
                                 {sections.map((section) => (
@@ -443,7 +449,7 @@ function EventDetails() {
                                 onChange={(e) =>
                                     setQuantity(Number(e.target.value))
                                 }
-                                disabled={!canBook}
+                                disabled={!canCreatePreference}
                             >
                                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
                                     .filter(
@@ -472,7 +478,7 @@ function EventDetails() {
                                     setMaxPrice(e.target.value)
                                 }
                                 required
-                                disabled={!canBook}
+                                disabled={!canCreatePreference}
                             />
                         </label>
 
@@ -512,12 +518,12 @@ function EventDetails() {
                             disabled={
                                 submitting ||
                                 sections.length === 0 ||
-                                !canBook
+                                !canCreatePreference
                             }
                         >
                             {submitting
                                 ? "Saving preferences..."
-                                : !canBook
+                                : !canCreatePreference
                                     ? salesStatus
                                     : "Save booking preferences"}
                         </button>
