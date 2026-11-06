@@ -18,8 +18,20 @@ dotenv.config();
 const app = express();
 
 // Middleware
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://ticketflow.vercel.app"
+];
+
 app.use(cors({
-    origin: process.env.CLIENT_URL
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true
 }));
 
 app.use(express.json());
